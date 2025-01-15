@@ -1,6 +1,6 @@
 // chat.js
 
-const socket = new WebSocket('ws://localhost:8080'); // Serverul local
+const socket = new WebSocket('ws://185.199.108.153:8080'); // Serverul local
 
 // Când conexiunea este deschisă
 socket.onopen = () => {
