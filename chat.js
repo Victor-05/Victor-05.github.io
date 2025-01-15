@@ -1,14 +1,13 @@
 // chat.js
 
-// Conectare la serverul WebSocket
-const socket = new WebSocket('ws://chat-app-server.herokuapp.com'); // Înlocuiește cu URL-ul real al serverului tău
+const socket = new WebSocket('ws://localhost:8080'); // Serverul local
 
-// Așteaptă până când conexiunea este stabilită
+// Când conexiunea este deschisă
 socket.onopen = () => {
   console.log('Conexiune stabilită cu serverul de chat');
 };
 
-// Când serverul trimite un mesaj, se va adăuga în chat
+// Când serverul trimite un mesaj
 socket.onmessage = (event) => {
   const chatDiv = document.getElementById('chat');
   const message = document.createElement('div');
@@ -26,7 +25,7 @@ document.getElementById('send').onclick = () => {
   }
 };
 
-// Opțional: Poți trimite mesaje și apăsând Enter (fără să dai click pe butonul "Trimite")
+// Permite trimiterea mesajului și apăsând Enter
 document.getElementById('input').addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
     document.getElementById('send').click();
