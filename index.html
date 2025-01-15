@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="ro">
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Live</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<title>Victor</title>
 </head>
-<body>
-  <h1>Chat Live</h1>
 
-  <div id="chat">
-    <!-- Mesajele vor fi afișate aici -->
-  </div>
+<frameset rows="20%,*" border="none">
+	<frame src="baner.html">
+	<frameset cols="20%,60%,20%">
+		<frame src="meniu.html">
+		<frame src="home.html" name="home">
+		<frame src="dreapta.html">
+	</frameset>
+</frameset>
+<noframes></noframes>
 
-  <input id="input" type="text" placeholder="Scrie un mesaj...">
-  <button id="send">Trimite</button>
-
-  <script src="chat.js"></script>
-</body>
 </html>
