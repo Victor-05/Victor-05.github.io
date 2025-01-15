@@ -1,8 +1,14 @@
 // server.js
 const WebSocket = require('ws');
+const http = require('http');
 
-const wss = new WebSocket.Server({ port: 8080 });
+// Creăm un server HTTP
+const server = http.createServer();
 
+// Creăm serverul WebSocket și îl asociem cu serverul HTTP
+const wss = new WebSocket.Server({ server });
+
+// Când un client se conectează
 wss.on('connection', (ws) => {
   console.log('Un client s-a conectat');
   
@@ -23,4 +29,12 @@ wss.on('connection', (ws) => {
   ws.on('close', () => {
     console.log('Un client s-a deconectat');
   });
+});
+
+// Ascultă pe IP-ul public și portul 8080
+const IP_ADDRESS = '185.199.108.153'; // IP-ul tău public
+const PORT = 8080; // Portul 8080
+
+server.listen(PORT, IP_ADDRESS, () => {
+  console.log(`Serverul WebSocket rulează pe ws://${IP_ADDRESS}:${PORT}`);
 });
