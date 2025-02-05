@@ -1,18 +1,110 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="ro">
 <head>
-<meta charset="utf-8">
-<title>Victor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devino influencer adevarat</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+            background: linear-gradient(270deg, #8a2be2, #e91e63, #ffeb3b, #4caf50);
+            background-size: 400% 400%;
+            animation: GradientBackground 10s ease infinite;
+        }
+        @keyframes GradientBackground {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            color: black;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-content div {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #8a2be2;
+        }
+        .card-content h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-content p {
+            color: #666;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .buttons button.like {
+            background: #ffeb3b;
+            color: black;
+        }
+        .buttons button.monetize {
+            background: #4caf50;
+            color: white;
+        }
+        .buttons button:hover {
+            opacity: 0.9;
+        }
+    </style>
 </head>
+<body>
+    <h1>🔥 Devino influencer adevarat 🔥</h1>
+    <div class="card">
+        <div class="card-content">
+            <div>🎵</div>
+            <h2>Viralizează-te rapid! 🚀</h2>
+            <p>Descoperă metodele prin care poți face bani și să atragi atenția pe TikTok!</p>
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="like" onclick="like()">🔥 Dă un like! (<span id="likes">0</span>)</button>
+        <button class="monetize">💸 Învață să monetizezi!</button>
+    </div>
 
-<frameset rows="20%,*" border="none">
-	<frame src="baner.html">
-	<frameset cols="20%,60%,20%">
-		<frame src="meniu.html">
-		<frame src="home.html" name="home">
-		<frame src="dreapta.html">
-	</frameset>
-</frameset>
-<noframes></noframes>
-
+    <script>
+        let likes = 0;
+        function like() {
+            likes++;
+            document.getElementById('likes').textContent = likes;
+        }
+    </script>
+</body>
 </html>
