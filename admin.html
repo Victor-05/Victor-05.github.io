@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/github-dark.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="admin" class="admin">
+
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <p class="eyebrow mono">// admin</p>
+    <h1>Sign in</h1>
+    <p class="muted">Paste your GitHub token. It needs <b>Contents: Read and write</b> access to <code id="repo-name"></code>.</p>
+    <form id="login-form">
+      <input class="input mono" type="password" id="token" placeholder="github_pat_…" autocomplete="off" required>
+      <label class="check"><input type="checkbox" id="remember" checked> Remember me on this device</label>
+      <button class="btn primary" type="submit">Sign in</button>
+      <p id="login-error" class="error"></p>
+    </form>
+    <details>
+      <summary>How do I get a token?</summary>
+      <ol>
+        <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained tokens → New</a>.</li>
+        <li><b>Repository access</b>: Only select repositories → your <code>*.github.io</code> repo.</li>
+        <li><b>Permissions → Repository → Contents</b>: Read and write.</li>
+        <li>Generate, copy, paste it here. It stays in your browser only.</li>
+      </ol>
+    </details>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header class="admin-bar">
+    <div class="admin-bar-inner">
+      <a class="brand" href="#posts"><span>~/</span><b>admin</b></a>
+      <nav class="tabs">
+        <a href="#posts" data-tab="posts">Posts</a>
+        <a href="#projects" data-tab="projects">Projects</a>
+        <a href="#settings" data-tab="settings">Settings</a>
+      </nav>
+      <div class="admin-user">
+        <a class="btn ghost small" href="index.html" target="_blank">View site ↗</a>
+        <img id="avatar" alt="">
+        <button class="btn ghost small" id="logout">Log out</button>
+      </div>
+    </div>
+  </header>
+  <main id="view" class="admin-main"></main>
+</div>
+
+<div id="busy" class="busy hidden"><div class="spinner"></div><p class="mono small" id="busy-text">Working…</p></div>
+<div id="toasts" class="toasts"></div>
+
+<script src="assets/vendor/marked.min.js"></script>
+<script src="assets/vendor/purify.min.js"></script>
+<script src="assets/vendor/highlight.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>
