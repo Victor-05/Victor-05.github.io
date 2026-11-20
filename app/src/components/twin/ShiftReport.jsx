@@ -5,7 +5,7 @@ import { COMPONENT_RO, explainBottleneck } from '../../sim/insights.js'
 
 const LOSS_RO = { feed: 'Robotul așteaptă găleți (alimentare)', operator: 'Robotul așteaptă palet liber (operator)', robotFault: 'Defect robot', conveyorVision: 'Defect conveior / viziune' }
 
-export default function ShiftReport({ report, onClose }) {
+export default function ShiftReport({ report, onClose, onSend, onPrint }) {
   return (
     <AnimatePresence>
       {report && (
@@ -54,7 +54,11 @@ export default function ShiftReport({ report, onClose }) {
             </ul>
             <p className="mt-3 text-xs text-slate-400">Găleți respinse la intrare: {fmtNum(report.lostArrivals.blocked)} (coadă plină) · {fmtNum(report.lostArrivals.conveyorFault)} (defect conveior). În realitate linia din amonte ar trebui să se oprească.</p>
             <p className="mt-3 text-[11px] text-slate-500">Simulare cu parametri de test și ipoteze; nu reprezintă garanții de performanță. Fără calcule financiare.</p>
-            <button onClick={onClose} className="mt-5 w-full rounded-xl bg-sky-400 py-3 font-semibold text-slate-950 hover:bg-sky-300">Închide</button>
+            <div className="mt-5 grid gap-2 sm:grid-cols-2">
+              <button onClick={onSend} className="rounded-xl bg-amber-400 py-3 text-sm font-semibold text-slate-950 hover:bg-amber-300">Trimite această configurație la Tech-Con</button>
+              <button onClick={onPrint} className="rounded-xl border border-sky-400/60 py-3 text-sm font-semibold text-sky-300 hover:bg-sky-400/10">Raport pentru directorul de investiții</button>
+              <button onClick={onClose} className="rounded-xl border border-slate-700 py-2.5 text-sm text-slate-300 hover:text-white sm:col-span-2">Închide</button>
+            </div>
           </motion.div>
         </motion.div>
       )}

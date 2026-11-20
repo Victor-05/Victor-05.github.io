@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, LabelList } from 'recharts'
 import { GitCompareArrows } from 'lucide-react'
 import { Card } from './Panels.jsx'
@@ -8,8 +7,7 @@ import { fmtNum } from '../../sim/useSimulation.js'
 
 const COLORS = { A: '#64748b', B: '#fbbf24', C: '#34d399' }
 
-export default function Scenarios({ params }) {
-  const [rows, setRows] = useState(null)
+export default function Scenarios({ params, rows, setRows, onSend }) {
   return (
     <Card title="Comparație scenarii (schimb de 8 h)" icon={GitCompareArrows}
       right={<button onClick={() => setRows(compareScenarios(params))} className="rounded-lg bg-sky-400 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-sky-300">{rows ? 'Recalculează' : 'Compară scenarii'}</button>}>
@@ -51,6 +49,7 @@ export default function Scenarios({ params }) {
             Robot mai rapid (B) față de actual: <strong className="text-amber-300">{rows[1].buckets - rows[0].buckets >= 0 ? '+' : ''}{fmtNum(rows[1].buckets - rows[0].buckets)} găleți/schimb</strong>.
             {' '}{Math.abs(rows[1].buckets - rows[0].buckets) < rows[0].buckets * 0.02 ? 'Practic fără efect: robotul nu este componenta care limitează.' : 'Robotul limita producția în scenariul actual.'}
           </p>
+          <button onClick={onSend} className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300">Trimite această configurație la Tech-Con</button>
         </>
       )}
     </Card>

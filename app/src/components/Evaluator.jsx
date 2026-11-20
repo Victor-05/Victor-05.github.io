@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { Sparkles, RotateCcw, ClipboardCheck, AlertCircle } from 'lucide-react'
 import { Section, Field, inputCls, Segmented } from './ui.jsx'
 import Results from './Results.jsx'
-import LeadForm from './LeadForm.jsx'
+import { useLead } from '../lib/leadContext.js'
 import { validateInputs, evaluate, defaultBucketsPerPallet, DEMO_INPUT } from '../lib/evaluate.js'
 
 const EMPTY = { companyName: '', weightKg: '', bucketsPerPallet: '', hasHandle: '', material: '', lineRate: '', shifts: '', hoursPerShift: '8' }
@@ -12,7 +12,7 @@ export default function Evaluator() {
   const [form, setForm] = useState(EMPTY)
   const [errors, setErrors] = useState({})
   const [out, setOut] = useState(null)
-  const [leadOpen, setLeadOpen] = useState(false)
+  const { openLead } = useLead()
   const resultsRef = useRef(null)
 
   const update = (k, v) => {
@@ -102,7 +102,7 @@ export default function Evaluator() {
         <div ref={resultsRef} className="scroll-mt-6">
           <AnimatePresence mode="wait">
             {out ? (
-              <Results key={out.key} result={out.result} values={out.values} onRequest={() => setLeadOpen(true)} />
+              <Results key={out.key} result={out.result} values={out.values} onRequest={() => openLead({ values: out.values, result: out.result })} />
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex h-full min-h-[280px] flex-col items-center justify-center rounded-3xl border border-dashed border-slate-800 p-8 text-center">
                 <div className="mb-4 grid grid-cols-4 gap-1.5 opacity-40">
@@ -117,7 +117,6 @@ export default function Evaluator() {
           </AnimatePresence>
         </div>
       </div>
-      {out && <LeadForm open={leadOpen} onClose={() => setLeadOpen(false)} values={out.values} result={out.result} />}
     </Section>
   )
 }

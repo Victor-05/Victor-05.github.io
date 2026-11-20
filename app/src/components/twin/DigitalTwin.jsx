@@ -8,6 +8,10 @@ import Events, { AlarmBanner } from './Events.jsx'
 import Charts from './Charts.jsx'
 import ShiftReport from './ShiftReport.jsx'
 import Scenarios from './Scenarios.jsx'
+import PrintReport from './PrintReport.jsx'
+import { buildSimConfig } from '../../sim/summary.js'
+import { useLead } from '../../lib/leadContext.js'
+import { FileText } from 'lucide-react'
 import { Kpis, BottleneckPanel } from './Panels.jsx'
 import { useSimulation, fmtClock } from '../../sim/useSimulation.js'
 
@@ -15,6 +19,29 @@ export default function DigitalTwin() {
   const { sim, running, setRunning, speed, setSpeed, refresh, reset } = useSimulation()
   const [report, setReport] = useState(null)
   const [version, setVersion] = useState(0)
+  const [scenarios, setScenarios] = useState(null)
+  const [printData, setPrintData] = useState(null)
+  const { openLead, lastLead } = useLead()
+
+  // Under 1 h simulated there is too little data: report a full shift run on a clone (live sim untouched).
+  const baseSim = () => {
+    if (sim.now >= 3600) return sim
+    const c = sim.clone()
+    c.runShift()
+    return c
+  }
+  const sendConfig = () => {
+    const s = baseSim()
+    setReport(null)
+    document.getElementById('evaluator')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    openLead({ simConfig: buildSimConfig(s) })
+  }
+  const openPrint = () => {
+    const s = baseSim()
+    const r = s.report()
+    setReport(null)
+    setPrintData({ report: r, config: buildSimConfig(s, r), params: { ...s.params } })
+  }
   const snap = sim.snapshot()
 
   const onParams = (patch, full = false) => {
@@ -69,7 +96,8 @@ export default function DigitalTwin() {
           <AlarmBanner sim={sim} />
           <Kpis sim={sim} />
           <Charts samples={sim.s.samples} count={sim.s.samples.length} version={version} />
-          <Scenarios params={sim.params} />
+          <Scenarios params={sim.params} rows={scenarios} setRows={setScenarios} onSend={sendConfig} />
+          <button onClick={openPrint} className="flex w-full items-center justify-center gap-2 rounded-2xl border border-sky-400/40 bg-sky-400/5 py-3 text-sm font-semibold text-sky-300 hover:bg-sky-400/10"><FileText className="h-4 w-4" /> Raport pentru directorul de investiții</button>
         </div>
         <div className="min-w-0 space-y-3">
           <Controls sim={sim} running={running} setRunning={setRunning} speed={speed} setSpeed={setSpeed} onReset={onReset} onShift={onShift} onStep={onStep} onParams={onParams} />
@@ -78,7 +106,8 @@ export default function DigitalTwin() {
         </div>
       </div>
       <p className="mt-4 text-[11px] text-slate-500">Model: simulare cu evenimente discrete, deterministă. Ritmurile robotului pornesc de la rezultatele de test (7,4 găleți/min la 13 kg, 8,6 la 5 kg), care nu reprezintă garanții. Valorile marcate [ipoteză] sunt presupuneri editabile. Schimbarea paleților și a separatoarelor rămâne manuală; transportul la logistică, înfolierea și expedierea nu sunt modelate.</p>
-      <ShiftReport report={report} onClose={() => setReport(null)} />
+      <ShiftReport report={report} onClose={() => setReport(null)} onSend={sendConfig} onPrint={openPrint} />
+      <PrintReport open={!!printData} onClose={() => setPrintData(null)} {...(printData ?? {})} scenarios={scenarios} leadId={lastLead?.id} />
     </Section>
   )
 }

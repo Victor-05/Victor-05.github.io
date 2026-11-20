@@ -1,4 +1,5 @@
 import { Simulation, cycleTimes } from './engine.js'
+import { COMPONENT_RO } from './insights.js'
 
 /** A = current, B = faster robot only (hypothetical), C = balanced/optimised. Full 8 h shift, no events. */
 export function compareScenarios(params) {
@@ -11,6 +12,6 @@ export function compareScenarios(params) {
   return defs.map((d) => {
     const sim = new Simulation({ ...params, ...d.patch })
     const r = sim.runShift()
-    return { ...d, params: sim.params, buckets: r.buckets, pallets: r.pallets, avgRate: r.avgRate, targetPct: r.targetPct, robotUtil: r.stats.robotUtil, bottleneck: r.bottleneck.component }
+    return { ...d, params: sim.params, buckets: r.buckets, pallets: r.pallets, avgRate: r.avgRate, targetPct: r.targetPct, robotUtil: r.stats.robotUtil, bottleneck: r.bottleneck.component, bottleneckLabel: COMPONENT_RO[r.bottleneck.component] }
   })
 }

@@ -34,3 +34,18 @@ export function saveLead(lead) {
     return false
   }
 }
+
+/** Build the stored lead object. Evaluator data and simulator config are both optional. */
+export function buildLead({ form, values = null, result = null, simConfig = null, id = makeReferenceId(), now = new Date() }) {
+  return {
+    id,
+    createdAt: now.toISOString(),
+    ...form,
+    company: values?.companyName || form.company?.trim() || 'Nespecificat',
+    source: simConfig && values ? 'evaluator+digital-twin' : simConfig ? 'digital-twin' : 'evaluator',
+    input: values,
+    verdict: result?.verdict ?? null,
+    daily: result?.daily ?? null,
+    simConfig,
+  }
+}

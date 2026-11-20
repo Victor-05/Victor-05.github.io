@@ -2,15 +2,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { CheckCircle2, X, FlaskConical } from 'lucide-react'
 import { Field, inputCls } from './ui.jsx'
-import { validateLead, makeReferenceId, saveLead } from '../lib/lead.js'
+import { validateLead, buildLead, saveLead } from '../lib/lead.js'
+import { simConfigRows } from '../sim/summary.js'
 
 const todayStr = () => {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-export default function LeadForm({ open, onClose, values, result }) {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', date: '', consent: false })
+export default function LeadForm({ open, onClose, values = null, result = null, simConfig = null, onSubmitted }) {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', date: '', consent: false, company: '' })
   const [errors, setErrors] = useState({})
   const [done, setDone] = useState(null)
   const set = (k) => (e) => {
@@ -24,9 +25,10 @@ export default function LeadForm({ open, onClose, values, result }) {
     const errs = validateLead(form)
     setErrors(errs)
     if (Object.keys(errs).length) return
-    const lead = { id: makeReferenceId(), createdAt: new Date().toISOString(), ...form, company: values.companyName, input: values, verdict: result.verdict, daily: result.daily }
+    const lead = buildLead({ form, values, result, simConfig })
     const stored = saveLead(lead)
     setDone({ ...lead, stored })
+    onSubmitted?.(lead)
   }
 
   const close = () => {
@@ -64,9 +66,12 @@ export default function LeadForm({ open, onClose, values, result }) {
                     ['Companie', done.company],
                     ['Contact', `${done.name} · ${done.email}${done.phone ? ' · ' + done.phone : ''}`],
                     ['Dată demo preferată', new Date(done.date + 'T00:00:00').toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' })],
-                    ['Format', `${done.input.weightKg} kg · ${done.input.bucketsPerPallet} găleți/palet`],
-                    ['Verdict orientativ', done.verdict],
-                    ['Estimare / zi', `${done.daily.buckets.toLocaleString('ro-RO')} găleți · ${done.daily.pallets.toLocaleString('ro-RO')} paleți`],
+                    ...(done.input ? [
+                      ['Format', `${done.input.weightKg} kg · ${done.input.bucketsPerPallet} găleți/palet`],
+                      ['Verdict orientativ', done.verdict],
+                      ['Estimare / zi', `${done.daily.buckets.toLocaleString('ro-RO')} găleți · ${done.daily.pallets.toLocaleString('ro-RO')} paleți`],
+                    ] : []),
+                    ...(done.simConfig ? simConfigRows(done.simConfig).map(([k, v]) => [`Simulare · ${k}`, v]) : []),
                   ].map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-4"><dt className="text-slate-500">{k}</dt><dd className="text-right text-slate-200">{v}</dd></div>
                   ))}
@@ -76,6 +81,22 @@ export default function LeadForm({ open, onClose, values, result }) {
               </motion.div>
             ) : (
               <form onSubmit={submit} noValidate className="space-y-4">
+                {simConfig && (
+                  <div data-testid="sim-summary" className="rounded-2xl border border-sky-400/30 bg-sky-400/5 p-3">
+                    <p className="mb-2 text-xs font-semibold text-sky-300">Configurație Digital Twin atașată (doar citire)</p>
+                    <dl className="space-y-1 text-xs">
+                      {simConfigRows(simConfig).map(([k, v]) => (
+                        <div key={k} className="flex justify-between gap-3"><dt className="text-slate-500">{k}</dt><dd className={`text-right ${k === 'Factor viteză robot' && simConfig.hypothetical ? 'text-amber-300' : 'text-slate-200'}`}>{v}</dd></div>
+                      ))}
+                    </dl>
+                    <p className="mt-2 text-[10px] text-slate-500">Valori simulate, nu garanții.</p>
+                  </div>
+                )}
+                {!values && (
+                  <Field label="Companie (opțional)" htmlFor="l-company">
+                    <input id="l-company" className={inputCls(false)} value={form.company} onChange={set('company')} placeholder="ex. Exemplu Ingrediente SRL (fictiv)" autoComplete="off" />
+                  </Field>
+                )}
                 <Field label="Nume și prenume *" htmlFor="l-name" error={errors.name}>
                   <input id="l-name" className={inputCls(errors.name)} value={form.name} onChange={set('name')} placeholder="ex. Ana Popescu (fictiv)" autoComplete="off" />
                 </Field>
