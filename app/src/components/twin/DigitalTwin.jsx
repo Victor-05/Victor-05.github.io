@@ -11,6 +11,7 @@ import Scenarios from './Scenarios.jsx'
 import { buildSimConfig } from '../../sim/summary.js'
 import { useLead } from '../../lib/leadContext.js'
 import { FileText } from 'lucide-react'
+import { markStep } from '../../lib/guide.js'
 import { Kpis, BottleneckPanel } from './Panels.jsx'
 import { useSimulation, fmtClock } from '../../sim/useSimulation.js'
 
@@ -47,7 +48,7 @@ export default function DigitalTwin({ bare = false }) {
     refresh()
   }
   const onReset = () => { setRunning(false); reset(); setVersion((v) => v + 1) }
-  const onShift = () => { setRunning(false); setReport(sim.runShift()); refresh() }
+  const onShift = () => { setRunning(false); setReport(sim.runShift()); refresh(); markStep(1) }
   const onTrigger = (kind, dur) => {
     sim.trigger(kind, dur)
     if (!running) setRunning(true)
@@ -88,7 +89,7 @@ export default function DigitalTwin({ bare = false }) {
           <div className="grid grid-cols-3 gap-2 xl:hidden">
             <button onClick={() => setRunning(!running)} aria-label={running ? 'Pauză simulare' : 'Start simulare'} className={`flex items-center justify-center gap-1.5 rounded-xl py-3 text-sm font-semibold ${running ? 'bg-amber-400 text-slate-950' : 'bg-emerald-400 text-slate-950'}`}>{running ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}{running ? 'Pauză' : 'Start'}</button>
             <button onClick={() => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length])} aria-label="Schimbă viteza" className="rounded-xl border border-slate-700 py-3 text-sm font-semibold text-slate-200">{speed}× ⟳</button>
-            <button onClick={onShift} aria-label="Schimb complet 8 h" className="flex items-center justify-center gap-1 rounded-xl bg-sky-400 py-3 text-xs font-semibold text-slate-950"><FastForward className="h-4 w-4" />Schimb 8 h</button>
+            <button onClick={onShift} data-guide="run-shift" aria-label="Schimb complet 8 h" className="flex items-center justify-center gap-1 rounded-xl bg-sky-400 py-3 text-xs font-semibold text-slate-950"><FastForward className="h-4 w-4" />Schimb 8 h</button>
           </div>
           <AlarmBanner sim={sim} />
           <Kpis sim={sim} />

@@ -7,10 +7,13 @@ import LeadForm from './components/LeadForm.jsx'
 import PrintReport from './components/twin/PrintReport.jsx'
 import Landing from './pages/Landing.jsx'
 import { LeadContext } from './lib/leadContext.js'
+import { markStep } from './lib/guide.js'
+import TestGuide from './components/TestGuide.jsx'
 
 // Route-level code splitting: recharts/simulator only load on their pages.
 const TwinPage = lazy(() => import('./pages/TwinPage.jsx'))
 const EvaluatorPage = lazy(() => import('./pages/EvaluatorPage.jsx'))
+const CrmPage = lazy(() => import('./pages/CrmPage.jsx'))
 const Loading = () => <div className="min-h-svh pt-14" aria-busy="true" />
 
 function AnimatedRoutes() {
@@ -24,6 +27,7 @@ function AnimatedRoutes() {
           <Route path="/" element={<Landing />} />
           <Route path="/digital-twin" element={<TwinPage />} />
           <Route path="/evaluator" element={<EvaluatorPage />} />
+          <Route path="/cereri" element={<CrmPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         </Suspense>
@@ -48,7 +52,8 @@ export default function App() {
           <AnimatedRoutes />
           <Footer />
         </div>
-        <LeadForm key={lead.key} open={lead.open} onClose={() => setLead((l) => ({ ...l, open: false }))} values={lead.values} result={lead.result} simConfig={lead.simConfig} onSubmitted={setLastLead} />
+        <LeadForm key={lead.key} open={lead.open} onClose={() => setLead((l) => ({ ...l, open: false }))} values={lead.values} result={lead.result} simConfig={lead.simConfig} onSubmitted={(l) => { setLastLead(l); if (l.simConfig) markStep(3) }} />
+        <TestGuide />
         <PrintReport open={!!printData} onClose={() => setPrintData(null)} {...(printData ?? {})} leadId={lastLead?.id} />
       </LeadContext.Provider>
     </HashRouter>

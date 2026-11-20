@@ -4,13 +4,14 @@ import { Card } from './Panels.jsx'
 import { compareScenarios } from '../../sim/scenarios.js'
 import { COMPONENT_RO } from '../../sim/insights.js'
 import { fmtNum } from '../../sim/useSimulation.js'
+import { markStep } from '../../lib/guide.js'
 
 const COLORS = { A: '#64748b', B: '#fbbf24', C: '#34d399' }
 
 export default function Scenarios({ params, rows, setRows, onSend }) {
   return (
     <Card title="Comparație scenarii (schimb de 8 h)" icon={GitCompareArrows}
-      right={<button onClick={() => setRows(compareScenarios(params))} className="rounded-lg bg-sky-400 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-sky-300">{rows ? 'Recalculează' : 'Compară scenarii'}</button>}>
+      right={<button data-guide="scenarios" onClick={() => { setRows(compareScenarios(params)); markStep(2) }} className="rounded-lg bg-sky-400 px-3 py-1.5 text-xs font-semibold text-slate-950 hover:bg-sky-300">{rows ? 'Recalculează' : 'Compară scenarii'}</button>}>
       {!rows ? (
         <p className="text-xs text-slate-400">Rulează 3 schimburi complete cu parametrii actuali: <strong className="text-slate-200">A</strong> actual, <strong className="text-amber-300">B</strong> doar robot mai rapid (ipotetic – peste rezultatul testat), <strong className="text-emerald-300">C</strong> optimizat (alimentare echilibrată cu robotul, schimbare palet ≤ 60 s, coadă ≥ 8).</p>
       ) : (
@@ -49,7 +50,7 @@ export default function Scenarios({ params, rows, setRows, onSend }) {
             Robot mai rapid (B) față de actual: <strong className="text-amber-300">{rows[1].buckets - rows[0].buckets >= 0 ? '+' : ''}{fmtNum(rows[1].buckets - rows[0].buckets)} găleți/schimb</strong>.
             {' '}{Math.abs(rows[1].buckets - rows[0].buckets) < rows[0].buckets * 0.02 ? 'Practic fără efect: robotul nu este componenta care limitează.' : 'Robotul limita producția în scenariul actual.'}
           </p>
-          <button onClick={onSend} className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300">Trimite această configurație la Tech-Con</button>
+          <button onClick={onSend} data-guide="send-config" className="mt-3 w-full rounded-xl bg-amber-400 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300">Trimite această configurație la Tech-Con</button>
         </>
       )}
     </Card>

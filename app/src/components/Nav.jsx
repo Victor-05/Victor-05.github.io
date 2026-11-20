@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useLead } from '../lib/leadContext.js'
 
 const linkCls = ({ isActive }) =>
-  `rounded-full px-2.5 py-1.5 text-xs font-medium transition sm:px-3.5 sm:text-sm ${isActive ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`
+  `rounded-full px-2 py-1.5 text-xs font-medium transition sm:px-3.5 sm:text-sm ${isActive ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'}`
 
 export default function Nav() {
   const { openLead } = useLead()
@@ -16,6 +16,7 @@ export default function Nav() {
         <div className="flex items-center gap-0.5 sm:gap-1">
           <NavLink to="/digital-twin" className={linkCls}>Digital Twin</NavLink>
           <NavLink to="/evaluator" className={linkCls}>Evaluator</NavLink>
+          <NavLink to="/cereri" className={(a) => `${linkCls(a)} !text-[11px] opacity-80 sm:!text-xs`}>Cereri<span className="hidden sm:inline"> (demo)</span></NavLink>
           <button onClick={() => openLead({})} className="ml-1 rounded-full bg-[#ff7a1a] px-3 py-1.5 text-xs font-semibold text-slate-950 transition hover:bg-[#ff9445] sm:px-4 sm:text-sm">
             <span className="sm:hidden">Solicită</span><span className="hidden sm:inline">Solicită evaluare</span>
           </button>

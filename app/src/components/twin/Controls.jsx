@@ -29,7 +29,7 @@ export default function Controls({ sim, running, setRunning, speed, setSpeed, on
           {running ? <><Pause className="h-4 w-4" /> Pauză</> : <><Play className="h-4 w-4" /> Pornește</>}
         </button>
         <button onClick={onReset} className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-700 px-3 py-2.5 text-sm text-slate-200 transition hover:border-slate-500"><RotateCcw className="h-4 w-4" /> Reset</button>
-        <button onClick={onShift} className="flex items-center justify-center gap-1.5 rounded-xl bg-sky-400 px-2 py-2.5 text-xs font-semibold leading-tight text-slate-950 transition hover:bg-sky-300"><FastForward className="h-4 w-4 shrink-0" /> Rulează schimb complet</button>
+        <button onClick={onShift} data-guide="run-shift" className="flex items-center justify-center gap-1.5 rounded-xl bg-sky-400 px-2 py-2.5 text-xs font-semibold leading-tight text-slate-950 transition hover:bg-sky-300"><FastForward className="h-4 w-4 shrink-0" /> Rulează schimb complet</button>
       </div>
       <div className="mt-3 flex items-center gap-2">
         <button onClick={onStep} title="Avansează la următorul eveniment" className="rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-300 hover:border-slate-500 hover:text-white">Pas ▸</button>

@@ -4,6 +4,7 @@ import { Sparkles, RotateCcw, ClipboardCheck, AlertCircle } from 'lucide-react'
 import { Section, Field, inputCls, Segmented } from './ui.jsx'
 import Results from './Results.jsx'
 import { useLead } from '../lib/leadContext.js'
+import { markStep } from '../lib/guide.js'
 import { evaluatorPrintData } from '../sim/summary.js'
 import { validateInputs, evaluate, defaultBucketsPerPallet, DEMO_INPUT } from '../lib/evaluate.js'
 
@@ -27,6 +28,7 @@ export default function Evaluator({ bare = false }) {
     e.preventDefault()
     const { errors: errs, values } = validateInputs(form)
     setErrors(errs)
+    if (errs.weightKg) markStep(4)
     if (!values) {
       setOut(null)
       setTimeout(() => document.querySelector('form [role="alert"]')?.parentElement?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
@@ -58,7 +60,7 @@ export default function Evaluator({ bare = false }) {
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="Greutate (kg) *" htmlFor="weightKg" error={errors.weightKg} hint="Testat: 5 sau 13 kg">
-              <input id="weightKg" inputMode="decimal" className={inputCls(errors.weightKg)} value={form.weightKg} onChange={onInput('weightKg')} placeholder="13" />
+              <input id="weightKg" data-guide="weight" inputMode="decimal" className={inputCls(errors.weightKg)} value={form.weightKg} onChange={onInput('weightKg')} placeholder="13" />
             </Field>
             <Field label={`Găleți / palet${autoPallet ? '' : ' *'}`} htmlFor="bucketsPerPallet" error={errors.bucketsPerPallet} hint={autoPallet ? `Implicit: ${autoPallet} (ca la referință)` : 'Obligatoriu pentru alte formate'}>
               <input id="bucketsPerPallet" inputMode="numeric" className={inputCls(errors.bucketsPerPallet)} value={form.bucketsPerPallet} onChange={onInput('bucketsPerPallet')} placeholder={autoPallet ? String(autoPallet) : 'ex. 60'} />
