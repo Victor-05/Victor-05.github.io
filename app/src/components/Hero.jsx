@@ -22,7 +22,7 @@ export default function Hero() {
           <img src="./favicon.svg" alt="" className="h-8 w-8" />
           Evaluator&nbsp;<span className="text-sky-400">UR20</span>
         </div>
-        <a href="#evaluator" className="hidden rounded-full border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-sky-400 hover:text-white sm:block">Verifică compatibilitatea</a>
+        <div className="flex gap-2"><a href="#digital-twin" className="hidden rounded-full border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-emerald-400 hover:text-white sm:block">Digital Twin</a><a href="#evaluator" className="hidden rounded-full border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-sky-400 hover:text-white sm:block">Verifică compatibilitatea</a></div>
       </nav>
 
       <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-10 sm:pb-28 sm:pt-16">
@@ -47,8 +47,8 @@ export default function Hero() {
           <a href="#evaluator" className="group inline-flex items-center justify-center gap-2 rounded-xl bg-sky-400 px-6 py-4 font-semibold text-slate-950 shadow-lg shadow-sky-500/25 transition hover:bg-sky-300">
             Verifică compatibilitatea <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
           </a>
-          <a href="#referinta" className="inline-flex items-center justify-center rounded-xl border border-slate-700 px-6 py-4 font-medium text-slate-200 transition hover:border-slate-500">
-            Vezi cazul de referință
+          <a href="#digital-twin" className="inline-flex items-center justify-center rounded-xl border border-emerald-400/50 bg-emerald-400/10 px-6 py-4 font-medium text-emerald-200 transition hover:bg-emerald-400/20">
+            Pornește Digital Twin
           </a>
         </motion.div>
 

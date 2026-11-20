@@ -13,3 +13,7 @@ body { background: #0b1220; color: #e2e8f0; -webkit-font-smoothing: antialiased;
   background-size: 32px 32px;
 }
 input, select { font-size: 16px; } /* avoid iOS zoom */
+
+@keyframes twin-pulse { 0%, 100% { opacity: .35 } 50% { opacity: 1 } }
+.twin-pulse { animation: twin-pulse 1.6s ease-in-out infinite; }
+input[type=range] { accent-color: #38bdf8; }
