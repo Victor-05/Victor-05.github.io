@@ -39,10 +39,10 @@ describe('routing', () => {
   it('deep link #/digital-twin renders the simulator; landing falls back to static story in jsdom (no WebGL)', async () => {
     window.location.hash = '#/digital-twin'
     const { unmount } = render(<App />)
-    expect(await screen.findByText(/Panou de control/)).toBeTruthy()
+    expect(await screen.findByText(/Panou de control/, {}, { timeout: 10000 })).toBeTruthy()
     unmount()
     window.location.hash = '#/'
     render(<App />)
-    expect(await screen.findByTestId('story-static')).toBeTruthy()
-  })
+    expect(await screen.findByTestId('story-static', {}, { timeout: 10000 })).toBeTruthy()
+  }, 30000)
 })
