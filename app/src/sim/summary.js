@@ -1,4 +1,4 @@
-import { cycleTimes } from './engine.js'
+import { cycleTimes, Simulation, defaultParams, TESTED } from './engine.js'
 import { COMPONENT_RO } from './insights.js'
 
 /** Read-only summary of the simulated configuration + results (pure). */
@@ -38,4 +38,12 @@ export function simConfigRows(c) {
     ['Ritm mediu', `${n(c.avgRate, 2)} găleți/min · ${c.targetPct}% din ținta de 6/min`],
     ['Blocaj principal', c.bottleneckLabel],
   ]
+}
+
+/** Evaluator inputs -> one simulated 8 h shift for the print report. */
+export function evaluatorPrintData(values) {
+  const base = defaultParams(TESTED[values.weightKg] ? values.weightKg : 13)
+  const sim = new Simulation({ ...base, weightKg: values.weightKg, perPallet: values.bucketsPerPallet, feedRate: values.lineRate })
+  const report = sim.runShift()
+  return { report, config: buildSimConfig(sim, report), params: { ...sim.params }, scenarios: null }
 }

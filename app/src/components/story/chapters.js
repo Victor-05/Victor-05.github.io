@@ -1,0 +1,10 @@
+// Scroll story copy, shared by the 3D story and the static fallback.
+export const CHAPTERS = [
+  { id: 'intro', kicker: 'Viața unei găleți', title: 'De pe linie pe palet, fără spatele operatorilor.', text: 'Pentru producătorii de umpluturi, creme și glazuri în găleți de 5–13 kg: cum preia un cobot UR20 paletizarea repetitivă – și ce rămâne de validat înainte de investiție.' },
+  { id: 'problem', kicker: '① Problema', title: 'Fiecare palet înseamnă sute de kilograme ridicate manual.', text: 'Înainte: paletizare manuală, 2 operatori pe schimb, 2–3 schimburi pe zi. Găleți de 5 și 13 kg, ridicate una câte una.', counter: { value: 44 * 13, suffix: ' kg', label: 'ridicate manual pentru un singur palet de 44 × 13 kg' } },
+  { id: 'vision', kicker: '② Conveior și viziune', title: 'Găleata sosește. Camera verifică mânerul.', text: 'Conveiorul aduce găleata în zona de prindere. O cameră 2D SICK verifică orientarea mânerului înainte ca robotul să o atingă.' },
+  { id: 'pick', kicker: '③ Prindere și așezare', title: 'Un gripper pneumatic dedicat. Un ritm măsurabil.', text: 'Cobotul UR20 preia găleata și o așază după o schemă repetabilă. La testare: 7,4 găleți/min la 13 kg, 8,6 la 5 kg, nicio prindere eșuată la FAT (țintă: minimum 6/min).', note: 'Rezultate de test ale unei aplicații; nu reprezintă garanții.' },
+  { id: 'pallets', kicker: '④ Două poziții de palet', title: 'Robotul umple un palet. Operatorul îl schimbă pe celălalt.', text: '44 găleți × 13 kg sau 100 găleți × 5 kg pe palet. Schimbarea paletului și așezarea separatoarelor rămân manuale.' },
+  { id: 'safety', kicker: '⑤ Siguranță', title: 'Trei scanere veghează celula.', text: '3 scanere de siguranță pe celulă: robotul încetinește când cineva se apropie și se oprește în zona de protecție.' },
+  { id: 'outro', kicker: '⑥ Linia dumneavoastră', title: 'Testați celula pe datele liniei dumneavoastră.', text: 'Simulați un schimb complet în Digital Twin sau verificați compatibilitatea formatului de găleată. Un robot mai rapid nu crește automat debitul fabricii – verificăm și amontele, și avalul.' },
+]

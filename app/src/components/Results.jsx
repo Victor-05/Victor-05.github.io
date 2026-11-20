@@ -18,7 +18,7 @@ function Num({ value, decimals = 0 }) {
   return v.toLocaleString('ro-RO', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
 }
 
-export default function Results({ result, values, onRequest }) {
+export default function Results({ result, values, onRequest, onPrint }) {
   const lv = LEVEL[result.verdictLevel]
   const VIcon = lv.icon
   const cards = [
@@ -90,6 +90,11 @@ export default function Results({ result, values, onRequest }) {
       <button onClick={onRequest} className="group flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-4 font-semibold text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-300">
         Solicită evaluare tehnică <ArrowRight className="h-5 w-5 transition group-hover:translate-x-1" />
       </button>
+      {onPrint && (
+        <button onClick={onPrint} className="w-full rounded-xl border border-sky-400/50 px-6 py-3 text-sm font-semibold text-sky-300 transition hover:bg-sky-400/10">
+          Raport pentru directorul de investiții (simulare 8 h cu datele dvs.)
+        </button>
+      )}
     </motion.div>
   )
 }

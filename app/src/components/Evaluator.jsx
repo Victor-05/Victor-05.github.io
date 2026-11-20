@@ -4,15 +4,16 @@ import { Sparkles, RotateCcw, ClipboardCheck, AlertCircle } from 'lucide-react'
 import { Section, Field, inputCls, Segmented } from './ui.jsx'
 import Results from './Results.jsx'
 import { useLead } from '../lib/leadContext.js'
+import { evaluatorPrintData } from '../sim/summary.js'
 import { validateInputs, evaluate, defaultBucketsPerPallet, DEMO_INPUT } from '../lib/evaluate.js'
 
 const EMPTY = { companyName: '', weightKg: '', bucketsPerPallet: '', hasHandle: '', material: '', lineRate: '', shifts: '', hoursPerShift: '8' }
 
-export default function Evaluator() {
+export default function Evaluator({ bare = false }) {
   const [form, setForm] = useState(EMPTY)
   const [errors, setErrors] = useState({})
   const [out, setOut] = useState(null)
-  const { openLead } = useLead()
+  const { openLead, openPrint } = useLead()
   const resultsRef = useRef(null)
 
   const update = (k, v) => {
@@ -38,7 +39,7 @@ export default function Evaluator() {
   const errorCount = Object.values(errors).filter(Boolean).length
 
   return (
-    <Section id="evaluator" eyebrow="Instrument" title="Evaluator de compatibilitate UR20" intro="Introduceți datele liniei. Comparăm cu aplicația de referință și estimăm ce ar putea paletiza celula pe zi.">
+    <Section id="evaluator" bare={bare} eyebrow="Instrument" title="Evaluator de compatibilitate UR20" intro="Introduceți datele liniei. Comparăm cu aplicația de referință și estimăm ce ar putea paletiza celula pe zi.">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <motion.form onSubmit={submit} noValidate initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="h-fit space-y-5 rounded-3xl border border-slate-800 bg-slate-900/50 p-5 backdrop-blur sm:p-7 lg:sticky lg:top-6">
@@ -102,7 +103,7 @@ export default function Evaluator() {
         <div ref={resultsRef} className="scroll-mt-6">
           <AnimatePresence mode="wait">
             {out ? (
-              <Results key={out.key} result={out.result} values={out.values} onRequest={() => openLead({ values: out.values, result: out.result })} />
+              <Results key={out.key} result={out.result} values={out.values} onRequest={() => openLead({ values: out.values, result: out.result })} onPrint={() => openPrint(evaluatorPrintData(out.values))} />
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex h-full min-h-[280px] flex-col items-center justify-center rounded-3xl border border-dashed border-slate-800 p-8 text-center">
                 <div className="mb-4 grid grid-cols-4 gap-1.5 opacity-40">

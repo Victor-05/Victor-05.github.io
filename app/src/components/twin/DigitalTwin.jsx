@@ -8,20 +8,18 @@ import Events, { AlarmBanner } from './Events.jsx'
 import Charts from './Charts.jsx'
 import ShiftReport from './ShiftReport.jsx'
 import Scenarios from './Scenarios.jsx'
-import PrintReport from './PrintReport.jsx'
 import { buildSimConfig } from '../../sim/summary.js'
 import { useLead } from '../../lib/leadContext.js'
 import { FileText } from 'lucide-react'
 import { Kpis, BottleneckPanel } from './Panels.jsx'
 import { useSimulation, fmtClock } from '../../sim/useSimulation.js'
 
-export default function DigitalTwin() {
+export default function DigitalTwin({ bare = false }) {
   const { sim, running, setRunning, speed, setSpeed, refresh, reset } = useSimulation()
   const [report, setReport] = useState(null)
   const [version, setVersion] = useState(0)
   const [scenarios, setScenarios] = useState(null)
-  const [printData, setPrintData] = useState(null)
-  const { openLead, lastLead } = useLead()
+  const { openLead, openPrint: openPrintView } = useLead()
 
   // Under 1 h simulated there is too little data: report a full shift run on a clone (live sim untouched).
   const baseSim = () => {
@@ -33,14 +31,13 @@ export default function DigitalTwin() {
   const sendConfig = () => {
     const s = baseSim()
     setReport(null)
-    document.getElementById('evaluator')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     openLead({ simConfig: buildSimConfig(s) })
   }
   const openPrint = () => {
     const s = baseSim()
     const r = s.report()
     setReport(null)
-    setPrintData({ report: r, config: buildSimConfig(s, r), params: { ...s.params } })
+    openPrintView({ report: r, config: buildSimConfig(s, r), params: { ...s.params }, scenarios })
   }
   const snap = sim.snapshot()
 
@@ -66,7 +63,7 @@ export default function DigitalTwin() {
   const cTone = snap.conveyor === 'FAULT' ? 'border-rose-500/50 text-rose-300' : snap.conveyor === 'BLOCKED' ? 'border-amber-400/50 text-amber-300' : 'border-sky-500/40 text-sky-300'
 
   return (
-    <Section id="digital-twin" eyebrow="Digital Twin · simulare live" title="Celula de paletizare, simulată în timp real"
+    <Section id="digital-twin" bare={bare} wide eyebrow="Digital Twin · simulare live" title="Celula de paletizare, simulată în timp real"
       intro="Modificați alimentarea, viteza robotului sau timpul de schimbare a paletului și vedeți imediat unde apare blocajul. Un robot mai rapid nu crește automat producția fabricii.">
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-3">
@@ -107,7 +104,6 @@ export default function DigitalTwin() {
       </div>
       <p className="mt-4 text-[11px] text-slate-500">Model: simulare cu evenimente discrete, deterministă. Ritmurile robotului pornesc de la rezultatele de test (7,4 găleți/min la 13 kg, 8,6 la 5 kg), care nu reprezintă garanții. Valorile marcate [ipoteză] sunt presupuneri editabile. Schimbarea paleților și a separatoarelor rămâne manuală; transportul la logistică, înfolierea și expedierea nu sunt modelate.</p>
       <ShiftReport report={report} onClose={() => setReport(null)} onSend={sendConfig} onPrint={openPrint} />
-      <PrintReport open={!!printData} onClose={() => setPrintData(null)} {...(printData ?? {})} scenarios={scenarios} leadId={lastLead?.id} />
     </Section>
   )
 }

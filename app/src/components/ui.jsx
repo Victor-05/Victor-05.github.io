@@ -5,15 +5,15 @@ export const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 }
 
-export function Section({ id, eyebrow, title, intro, children, className = '' }) {
+export function Section({ id, eyebrow, title, intro, children, className = '', bare = false, wide = false }) {
   return (
-    <section id={id} className={`relative px-4 py-16 sm:py-24 ${className}`}>
-      <div className="mx-auto max-w-6xl">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} className="mb-10 max-w-3xl">
+    <section id={id} className={`relative px-4 ${bare ? 'py-8 sm:py-12' : 'py-16 sm:py-24'} ${className}`}>
+      <div className={`mx-auto ${wide ? 'max-w-7xl' : 'max-w-6xl'}`}>
+        {!bare && <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} className="mb-10 max-w-3xl">
           {eyebrow && <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">{eyebrow}</p>}
           <h2 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl">{title}</h2>
           {intro && <p className="mt-4 text-base leading-relaxed text-slate-400 sm:text-lg">{intro}</p>}
-        </motion.div>
+        </motion.div>}
         {children}
       </div>
     </section>

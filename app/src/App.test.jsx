@@ -6,12 +6,14 @@ import App from './App.jsx'
 beforeAll(() => {
   globalThis.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} }
   Element.prototype.scrollIntoView = () => {}
+  window.scrollTo = () => {}
 })
 
 describe('App flow', () => {
   it('shows validation errors on empty submit, then evaluates demo and submits lead', async () => {
+    window.location.hash = '#/evaluator'
     render(<App />)
-    fireEvent.click(screen.getByRole('button', { name: /Evaluează compatibilitatea/i }))
+    fireEvent.click(await screen.findByRole('button', { name: /Evaluează compatibilitatea/i }, { timeout: 5000 }))
     expect(await screen.findByText(/Introduceți numele companiei/)).toBeTruthy()
     expect(screen.getByText(/Introduceți ritmul liniei/)).toBeTruthy()
 
@@ -30,5 +32,17 @@ describe('App flow', () => {
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: /Trimite solicitarea/i })) })
     expect(await screen.findByText(/^TC-\d{4}$/)).toBeTruthy()
     expect(JSON.parse(localStorage.getItem('ur20-leads')).length).toBe(1)
+  })
+})
+
+describe('routing', () => {
+  it('deep link #/digital-twin renders the simulator; landing falls back to static story in jsdom (no WebGL)', async () => {
+    window.location.hash = '#/digital-twin'
+    const { unmount } = render(<App />)
+    expect(await screen.findByText(/Panou de control/)).toBeTruthy()
+    unmount()
+    window.location.hash = '#/'
+    render(<App />)
+    expect(await screen.findByTestId('story-static')).toBeTruthy()
   })
 })
