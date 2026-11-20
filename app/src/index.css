@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { background: #0b1220; color: #e2e8f0; -webkit-font-smoothing: antialiased; }
+.grid-bg {
+  background-image: linear-gradient(rgba(148,163,184,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+input, select { font-size: 16px; } /* avoid iOS zoom */
